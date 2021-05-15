@@ -1,0 +1,673 @@
+---
+title: "M2 thesis for publication"
+author: "Johannes Ahlström"
+date: "30 june 2017"
+output: word_document
+---
+
+```{r setup, include=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r}
+library(readxl)
+library(stats)
+library(car)
+library(MASS)
+```
+
+```{r}
+FINAL_FILE_FOR_MULTIPLE_REGRESSION <- read_excel("C:/Users/johannes/Desktop/FINAL FILE FOR MULTIPLE REGRESSION1.xlsx", sheet = "all variables")
+df1<-na.omit(FINAL_FILE_FOR_MULTIPLE_REGRESSION)
+df1[,1]<-NULL
+df1[,1]<-NULL
+```
+
+```{r}
+fun <- function(x){
+  quantiles <- quantile( x, c(.05, .95 ) )
+  x[ x < quantiles[1] ] <- quantiles[1]
+  x[ x > quantiles[2] ] <- quantiles[2]
+  x
+}
+```
+
+```{r}
+df<-as.data.frame(apply(df1,2,fun))
+```
+
+
+```{r}
+m05 <- df[, c(6:15)]
+m06 <- df[, c(17:26)]
+m07 <- df[, c(28:37)]
+m08 <- df[, c(39:48)]
+m09 <- df[, c(50:59)]
+m10 <- df[, c(61:70)]
+m11 <- df[, c(72:81)]
+m12 <- df[, c(83:92)]
+m13 <- df[, c(94:103)]
+m14 <- df[, c(105:114)]
+```
+
+```{r}
+print(names(df))
+```
+
+```{r}
+print(summary.data.frame(df))
+```
+
+Means
+
+```{r}
+
+round(sapply(df, mean),2)
+
+```
+
+Standard Deviations
+
+```{r}
+round(sapply(df, sd),2)
+```
+
+Variances
+
+```{r}
+round(sapply(df, var),2)
+```
+
+
+```{r}
+#Histograms CSR
+hist(df$CSR2006)
+hist(df$CSR2007)
+hist(df$CSR2008)
+hist(df$CSR2009)
+hist(df$CSR2010)
+hist(df$CSR2011)
+hist(df$CSR2012)
+hist(df$CSR2013)
+hist(df$CSR2014)
+hist(df$CSR2015)
+```
+
+#Histograms independents#
+```{r}
+#Histograms independents#
+for ( i in seq(1,length( m05 ),1) ) hist(m05[,i],xlab = NULL,main=names(m05[i]))
+```
+```{r}
+for ( i in seq(1,length( m06 ),1) ) hist(m06[,i],xlab = NULL,main=names(m06[i]))
+```
+```{r}
+for ( i in seq(1,length( m07 ),1) ) hist(m07[,i],xlab = NULL,main=names(m07[i]))
+```
+```{r}
+for ( i in seq(1,length( m08 ),1) ) hist(m08[,i],xlab = NULL,main=names(m08[i]))
+```
+```{r}
+for ( i in seq(1,length( m09 ),1) ) hist(m09[,i],xlab = NULL,main=names(m09[i]))
+```
+```{r}
+for ( i in seq(1,length( m10 ),1) ) hist(m10[,i],xlab = NULL,main=names(m10[i]))
+```
+```{r}
+for ( i in seq(1,length( m11 ),1) ) hist(m11[,i],xlab = NULL,main=names(m11[i]))
+```
+```{r}
+for ( i in seq(1,length( m12 ),1) ) hist(m12[,i],xlab = NULL,main=names(m12[i]))
+```
+```{r}
+for ( i in seq(1,length( m13 ),1) ) hist(m13[,i],xlab = NULL,main=names(m13[i]))
+```
+```{r}
+for ( i in seq(1,length( m14 ),1) ) hist(m14[,i],xlab = NULL,main=names(m14[i]))
+```
+
+
+```{r}
+for ( i in seq(1,length( m05 ),1)) scatterplot(m05[,i],df$CSR2006,xlab=names(m05[i]),main=names(m05[i]))
+```
+```{r}
+for ( i in seq(1,length( m06 ),1)) scatterplot(m06[,i],df$CSR2007,xlab=names(m06[i]),main=names(m06[i]))
+```
+```{r}
+for ( i in seq(1,length( m07 ),1)) scatterplot(m07[,i],df$CSR2008,xlab=names(m07[i]),main=names(m07[i]))
+```
+```{r}
+for ( i in seq(1,length( m08 ),1)) scatterplot(m08[,i],df$CSR2009,xlab=names(m08[i]),main=names(m08[i]))
+```
+```{r}
+for ( i in seq(1,length( m09 ),1)) scatterplot(m09[,i],df$CSR2010,xlab=names(m09[i]),main=names(m09[i]))
+```
+```{r}
+for ( i in seq(1,length( m10 ),1)) scatterplot(m10[,i],df$CSR2011,xlab=names(m10[i]),main=names(m10[i]))
+```
+```{r}
+for ( i in seq(1,length( m11 ),1)) scatterplot(m11[,i],df$CSR2012,xlab=names(m11[i]),main=names(m11[i]))
+```
+```{r}
+for ( i in seq(1,length( m12 ),1)) scatterplot(m12[,i],df$CSR2013,xlab=names(m12[i]),main=names(m12[i]))
+```
+```{r}
+for ( i in seq(1,length( m13 ),1)) scatterplot(m13[,i],df$CSR2014,xlab=names(m13[i]),main=names(m13[i]))
+```
+```{r}
+for ( i in seq(1,length( m14 ),1)) scatterplot(m14[,i],df$CSR2015,xlab=names(m14[i]),main=names(m14[i]))
+```
+
+
+Individual correlation matrices
+2005 independents
+```{r}
+round(cor(m05),1)
+```
+
+2006 independents
+```{r}
+round(cor(m06),1)
+```
+
+2007 independents
+```{r}
+round(cor(m07),1)
+```
+
+2008 independents
+```{r}
+round(cor(m08),1)
+```
+
+2009 independents
+```{r}
+round(cor(m09),1)
+```
+
+2010 independents
+```{r}
+round(cor(m10),1)
+```
+
+2011 independents
+```{r}
+round(cor(m11),1)
+```
+
+2012 independents
+```{r}
+round(cor(m12),1)
+```
+
+2013 independents
+```{r}
+round(cor(m13),1)
+```
+
+2014 independents
+```{r}
+round(cor(m14),1)
+```
+
+Models
+First model spec 2006-2005
+```{r, model 1 spec 2006-2005}
+#Model
+fit06_05<- lm(df$CSR2006~df$`FCF/sales2005`+df$`FCF/employee2005`+df$ROA2005+df$ROE2005+df$`Net PM2005`+df$`Debt/Equity2005`+df$Sweden_dummy+df$Denmark_dummy+df$Finland_dummy+df$Norway_dummy)
+
+#Stepwise regression
+step06_05 <- stepAIC(fit06_05, direction="both")
+step06_05$anova # display result
+
+```
+
+Second model spec 2006-2005
+```{r,model 2 spec 2006-2005,}
+#Model
+fit2_06_05<-lm(df$CSR2006 ~ df$`FCF/sales2005` + df$`Net PM2005` + df$Denmark_dummy)
+
+#Anova
+print(Anova(fit2_06_05))
+
+#Summary
+print(summary(fit2_06_05))
+
+# Autocorrelation
+vif(fit2_06_05)
+sqrt(vif(fit2_06_05))
+
+##Non constant variance (Heteroscedasticity),
+plot(fit2_06_05$residuals)
+ncvTest(fit2_06_05)
+
+##Non Normality (model)
+qqPlot(fit2_06_05, main = "Q-Q plot")
+sresid06_05<-studres(fit2_06_05)
+hist(sresid06_05, freq = FALSE, main = "Distribution of studentizised residuals")
+
+na.sresid06_05<-na.omit(sresid06_05)
+xfit<-seq(min(na.sresid06_05), max(na.sresid06_05), length= 40)
+yfit<-dnorm(xfit)
+lines(xfit, yfit)
+
+#Outliers
+outlierTest(fit2_06_05)
+qqPlot(fit2_06_05,main = "Q-Q Plot")
+leveragePlots(fit2_06_05)
+```
+
+FIrst model spec 2007-2006
+```{r,model 1 spec 2007-2006,}
+ 
+#Model
+fit07_06<- lm(df$CSR2007~df$`FCF/sales2006`+df$`FCF/employee2006`+df$ROA2006+df$ROE2006+df$`Net PM2006`+df$`Debt/Equity2006`+df$Sweden_dummy +df$Denmark_dummy + df$Finland_dummy + df$Norway_dummy)
+
+#Stepwise regression
+step07_06 <- stepAIC(fit07_06, direction="both")
+step07_06$anova # display result
+
+```
+
+Second model 2007-2006
+
+```{r, model 2 spec 2007-2006}
+#Model
+fit2_07_06<-lm(df$CSR2007 ~ df$`FCF/sales2006` + df$`FCF/employee2006` + df$ROA2006 + df$`Net PM2006` + df$Denmark_dummy)
+#Anova
+print(Anova(fit2_07_06))
+
+#Summary
+print(summary(fit2_07_06))
+
+# Autocorrelation
+vif(fit2_07_06)
+sqrt(vif(fit2_07_06))
+
+##Non constant variance (Heteroscedasticity),
+plot(fit2_07_06$residuals)
+ncvTest(fit2_07_06)
+
+##Non Normality (model)
+qqPlot(fit2_07_06, main = "Q-Q plot")
+sresid07_06<-studres(fit2_07_06)
+hist(sresid07_06, freq = FALSE, main = "Distribution of studentizised residuals")
+
+na.sresid07_06<-na.omit(sresid07_06)
+xfit<-seq(min(na.sresid07_06), max(na.sresid07_06), length= 40)
+yfit<-dnorm(xfit)
+lines(xfit, yfit)
+
+#Outliers
+outlierTest(fit2_07_06)
+qqPlot(fit2_07_06,main = "Q-Q Plot")
+leveragePlots(fit2_07_06)
+
+
+```
+
+First model 2008-2007
+
+```{r, model 1 2008 2007}
+  #Model
+fit08_07<- lm(df$CSR2008~df$`FCF/sales2007`+df$`FCF/employee2007`+df$ROA2007+df$ROE2007+df$`Net PM2007`+df$`Debt/Equity2007`+df$Sweden_dummy +df$Denmark_dummy + df$Finland_dummy + df$Norway_dummy)
+
+#Stepwise regression
+step08_07 <- stepAIC(fit08_07, direction="both")
+step08_07$anova # display result
+```
+Second model 2008-2007
+```{r, model 2 2008 2007}
+
+#Model
+fit2_08_07<-lm(df$CSR2008 ~ df$`FCF/sales2007` + df$`FCF/employee2007` + df$`Net PM2007` + df$Denmark_dummy)
+#Anova
+print(Anova(fit2_08_07))
+
+#Summary
+print(summary(fit2_08_07))
+
+# Autocorrelation
+vif(fit2_08_07)
+sqrt(vif(fit2_08_07))
+
+##Non constant variance (Heteroscedasticity),
+plot(fit2_08_07$residuals)
+ncvTest(fit2_08_07)
+
+##Non Normality (model)
+qqPlot(fit2_08_07, main = "Q-Q plot")
+sresid08_07<-studres(fit2_08_07)
+hist(sresid08_07, freq = FALSE, main = "Distribution of studentizised residuals")
+
+na.sresid08_07<-na.omit(sresid08_07)
+xfit<-seq(min(na.sresid08_07), max(na.sresid08_07), length= 40)
+yfit<-dnorm(xfit)
+lines(xfit, yfit)
+
+#Outliers
+outlierTest(fit2_08_07)
+qqPlot(fit2_08_07,main = "Q-Q Plot")
+leveragePlots(fit2_08_07)
+
+
+```
+First model 2009-2008
+```{r}
+ #Model
+fit09_08<- lm(df$CSR2009~df$`FCF/sales2008`+df$`FCF/employee2008`+df$ROE2008+df$`Net PM2008`+df$`Debt/Equity2008`+df$Sweden_dummy +df$Denmark_dummy + df$Finland_dummy + df$Norway_dummy)
+
+#Stepwise regression
+step09_08 <- stepAIC(fit09_08, direction="both")
+step09_08$anova # display result
+
+```
+Second model 2009-2008
+
+```{r}
+#Model
+fit2_09_08<-lm(df$CSR2009 ~ df$`FCF/sales2008` + df$`Net PM2008` + df$`Debt/Equity2008` + df$Denmark_dummy)
+#Anova
+print(Anova(fit2_09_08))
+
+#Summary
+print(summary(fit2_09_08))
+
+# Autocorrelation
+vif(fit2_09_08)
+sqrt(vif(fit2_09_08))
+
+##Non constant variance (Heteroscedasticity),
+plot(fit2_09_08$residuals)
+ncvTest(fit2_09_08)
+
+##Non Normality (model)
+qqPlot(fit2_09_08, main = "Q-Q plot")
+sresid09_08<-studres(fit2_09_08)
+hist(sresid09_08, freq = FALSE, main = "Distribution of studentizised residuals")
+
+na.sresid09_08<-na.omit(sresid09_08)
+xfit<-seq(min(na.sresid09_08), max(na.sresid09_08), length= 40)
+yfit<-dnorm(xfit)
+lines(xfit, yfit)
+
+#Outliers
+outlierTest(fit2_09_08)
+qqPlot(fit2_09_08,main = "Q-Q Plot")
+leveragePlots(fit2_09_08)
+```
+
+First model 2010-2009
+```{r}
+  #Model
+fit10_09<- lm(df$CSR2010~df$`FCF/sales2009`+df$`FCF/employee2009`+df$ROE2009+df$`Net PM2009`+df$`Debt/Equity2009`+df$Sweden_dummy +df$Denmark_dummy + df$Finland_dummy + df$Norway_dummy)
+
+#Stepwise regression
+step10_09 <- stepAIC(fit10_09, direction="both")
+step10_09$anova # display result
+
+```
+
+Second model 2010-2009
+
+```{r}
+#Model
+fit2_10_09<-lm(df$CSR2010 ~ df$`FCF/employee2009` + df$Denmark_dummy)
+#Anova
+print(Anova(fit2_10_09))
+
+#Summary
+print(summary(fit2_10_09))
+
+# Autocorrelation
+vif(fit2_10_09)
+sqrt(vif(fit2_10_09))
+
+##Non constant variance (Heteroscedasticity),
+plot(fit2_10_09$residuals)
+ncvTest(fit2_10_09)
+
+##Non Normality (model)
+qqPlot(fit2_10_09, main = "Q-Q plot")
+sresid10_09<-studres(fit2_10_09)
+hist(sresid10_09, freq = FALSE, main = "Distribution of studentizised residuals")
+
+na.sresid10_09<-na.omit(sresid10_09)
+xfit<-seq(min(na.sresid10_09), max(na.sresid10_09), length= 40)
+yfit<-dnorm(xfit)
+lines(xfit, yfit)
+
+#Outliers
+outlierTest(fit2_10_09)
+qqPlot(fit2_10_09,main = "Q-Q Plot")
+leveragePlots(fit2_10_09)
+```
+
+First model 2011-2010
+
+```{r}
+#Model
+fit11_10<- lm(df$CSR2011~df$`FCF/sales2010`+df$`FCF/employee2010`+df$ROA2010+df$ROE2010+df$`Net PM2010`+df$`Debt/Equity2010`+df$Sweden_dummy +df$Denmark_dummy + df$Finland_dummy + df$Norway_dummy)
+
+#Stepwise regression
+step11_10 <- stepAIC(fit11_10, direction="both")
+step11_10$anova # display result
+
+```
+Second model 2011-2010
+
+```{r}
+#Model
+fit2_11_10<-lm(df$CSR2011 ~ df$`FCF/employee2010` + df$`Debt/Equity2010` + df$Denmark_dummy)
+#Anova
+print(Anova(fit2_11_10))
+
+#Summary
+print(summary(fit2_11_10))
+
+# Autocorrelation
+vif(fit2_11_10)
+sqrt(vif(fit2_11_10))
+
+##Non constant variance (Heteroscedasticity),
+plot(fit2_11_10$residuals)
+ncvTest(fit2_11_10)
+
+##Non Normality (model)
+qqPlot(fit2_11_10, main = "Q-Q plot")
+sresid11_10<-studres(fit2_11_10)
+hist(sresid11_10, freq = FALSE, main = "Distribution of studentizised residuals")
+
+na.sresid11_10<-na.omit(sresid11_10)
+xfit<-seq(min(na.sresid11_10), max(na.sresid11_10), length= 40)
+yfit<-dnorm(xfit)
+lines(xfit, yfit)
+
+#Outliers
+outlierTest(fit2_11_10)
+qqPlot(fit2_11_10,main = "Q-Q Plot")
+leveragePlots(fit2_11_10)
+```
+
+First model 2012 - 2011
+
+```{r}
+#Model
+fit12_11<- lm(df$CSR2012~df$`FCF/sales2011`+df$`FCF/employee2011`+df$ROA2011+df$ROE2011+df$`Net PM2011`+df$`Debt/Equity2011`+df$Sweden_dummy +df$Denmark_dummy + df$Finland_dummy + df$Norway_dummy)
+
+#Stepwise regression
+step12_11 <- stepAIC(fit12_11, direction="both")
+step12_11$anova # display result
+```
+
+Second model 2012 - 2011
+
+```{r}
+#Model
+fit2_12_11<-lm(df$CSR2012 ~ df$`FCF/sales2011` + df$`Debt/Equity2011` + df$Denmark_dummy)
+#Anova
+print(Anova(fit2_12_11))
+
+#Summary
+print(summary(fit2_12_11))
+
+# Autocorrelation
+vif(fit2_12_11)
+sqrt(vif(fit2_12_11))
+
+##Non constant variance (Heteroscedasticity),
+plot(fit2_12_11$residuals)
+ncvTest(fit2_12_11)
+
+##Non Normality (model)
+qqPlot(fit2_12_11, main = "Q-Q plot")
+sresid12_11<-studres(fit2_12_11)
+hist(sresid12_11, freq = FALSE, main = "Distribution of studentizised residuals")
+
+na.sresid12_11<-na.omit(sresid12_11)
+xfit<-seq(min(na.sresid12_11), max(na.sresid12_11), length= 40)
+yfit<-dnorm(xfit)
+lines(xfit, yfit)
+
+#Outliers
+outlierTest(fit2_12_11)
+qqPlot(fit2_12_11,main = "Q-Q Plot")
+leveragePlots(fit2_12_11)
+```
+First model 2013-2012
+
+```{r}
+#Model
+fit13_12<- lm(df$CSR2013~df$`FCF/sales2012`+df$`FCF/employee2012`+df$ROA2012+df$ROE2012+df$`Net PM2012`+df$`Debt/Equity2012`+df$Sweden_dummy +df$Denmark_dummy + df$Finland_dummy + df$Norway_dummy)
+
+#Stepwise regression
+step13_12 <- stepAIC(fit13_12, direction="both")
+step13_12$anova # display result
+
+```
+Second model 2013-2012
+
+```{r}
+#Model
+fit2_13_12<-lm(df$CSR2013 ~ df$`FCF/sales2012` + df$`Debt/Equity2012` + df$Denmark_dummy)
+#Anova
+print(Anova(fit2_13_12))
+
+#Summary
+print(summary(fit2_13_12))
+
+# Autocorrelation
+vif(fit2_13_12)
+sqrt(vif(fit2_13_12))
+
+##Non constant variance (Heteroscedasticity),
+plot(fit2_13_12$residuals)
+ncvTest(fit2_13_12)
+
+##Non Normality (model)
+qqPlot(fit2_13_12, main = "Q-Q plot")
+sresid13_12<-studres(fit2_13_12)
+hist(sresid13_12, freq = FALSE, main = "Distribution of studentizised residuals")
+
+na.sresid13_12<-na.omit(sresid13_12)
+xfit<-seq(min(na.sresid13_12), max(na.sresid13_12), length= 40)
+yfit<-dnorm(xfit)
+lines(xfit, yfit)
+
+#Outliers
+outlierTest(fit2_13_12)
+qqPlot(fit2_13_12,main = "Q-Q Plot")
+leveragePlots(fit2_13_12)
+```
+
+First model 2014-2013
+
+```{r}
+#Model
+fit14_13<- lm(df$CSR2014~df$`FCF/sales2013`+df$`FCF/employee2013`+df$ROA2013+df$ROE2013+df$`Net PM2013`+df$`Debt/Equity2013`+df$Sweden_dummy +df$Denmark_dummy + df$Finland_dummy + df$Norway_dummy)
+
+#Stepwise regression
+step14_13 <- stepAIC(fit14_13, direction="both")
+step14_13$anova # display result
+
+```
+Second model 2014-2013
+
+```{r}
+#Model
+fit2_14_13<-lm(df$CSR2014 ~ df$`FCF/sales2013` + df$ROA2013 + df$ROE2013 + df$Sweden_dummy + df$Finland_dummy)
+#Anova
+print(Anova(fit2_14_13))
+
+#Summary
+print(summary(fit2_14_13))
+
+# Autocorrelation
+vif(fit2_14_13)
+sqrt(vif(fit2_14_13))
+
+##Non constant variance (Heteroscedasticity),
+plot(fit2_14_13$residuals)
+ncvTest(fit2_14_13)
+
+##Non Normality (model)
+qqPlot(fit2_14_13, main = "Q-Q plot")
+sresid14_13<-studres(fit2_14_13)
+hist(sresid14_13, freq = FALSE, main = "Distribution of studentizised residuals")
+
+na.sresid14_13<-na.omit(sresid14_13)
+xfit<-seq(min(na.sresid14_13), max(na.sresid14_13), length= 40)
+yfit<-dnorm(xfit)
+lines(xfit, yfit)
+
+#Outliers
+outlierTest(fit2_14_13)
+qqPlot(fit2_14_13,main = "Q-Q Plot")
+leveragePlots(fit2_14_13)
+```
+First model 2015-2014
+
+```{r}
+#Model
+fit15_14<- lm(df$CSR2015~df$`FCF/sales2014`+df$`FCF/employee2014`+df$ROA2014+df$ROE2014+df$`Net PM2014`+df$`Debt/Equity2014`+df$Sweden_dummy +df$Denmark_dummy + df$Finland_dummy + df$Norway_dummy)
+
+#Stepwise regression
+step15_14 <- stepAIC(fit15_14, direction="both")
+step15_14$anova # display result
+
+```
+Second model 2015-2014
+
+```{r}
+#Model
+fit2_15_14<-lm(df$CSR2015 ~ df$`FCF/sales2014` + df$ROA2014 + df$ROE2014 + df$`Debt/Equity2014` + df$Denmark_dummy)
+#Anova
+print(Anova(fit2_15_14))
+
+#Summary
+print(summary(fit2_15_14))
+
+# Autocorrelation
+vif(fit2_15_14)
+sqrt(vif(fit2_15_14))
+
+##Non constant variance (Heteroscedasticity),
+plot(fit2_15_14$residuals)
+ncvTest(fit2_15_14)
+
+##Non Normality (model)
+qqPlot(fit2_15_14, main = "Q-Q plot")
+sresid15_14<-studres(fit2_15_14)
+hist(sresid15_14, freq = FALSE, main = "Distribution of studentizised residuals")
+
+na.sresid15_14<-na.omit(sresid15_14)
+xfit<-seq(min(na.sresid15_14), max(na.sresid15_14), length= 40)
+yfit<-dnorm(xfit)
+lines(xfit, yfit)
+
+#Outliers
+outlierTest(fit2_15_14)
+qqPlot(fit2_15_14,main = "Q-Q Plot")
+leveragePlots(fit2_15_14)
+```
+
